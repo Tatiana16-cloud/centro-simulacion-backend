@@ -1,0 +1,33 @@
+{
+  "name": "tatiana-project",
+  "version": "1.0.0",
+  "description": "it is a sample project",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "nodemon ./src/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdvr1994/tatiana-project.git"
+  },
+  "keywords": [
+    "sample",
+    "nodejs",
+    "api"
+  ],
+  "author": "jdvr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jdvr1994/tatiana-project/issues"
+  },
+  "homepage": "https://github.com/jdvr1994/tatiana-project#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
