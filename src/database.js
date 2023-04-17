@@ -6,7 +6,7 @@ class Database {
       host: 'localhost',
       user: 'root',
       password: 'rootroot',
-      database: 'centro_simulacion'
+      database: 'database_PIS3'
     });
   }
 

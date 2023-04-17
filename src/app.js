@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const MainRouter = require('./routes/index')
 
 class MainApp{
@@ -27,6 +28,7 @@ class MainApp{
     setMiddlewares(){
         this.app.use(express.urlencoded({ extended: false })); // Allow to receive messages with form format
         this.app.use(express.json()); // Allow to receive messages with json format
+        this.app.use(cors())
     }
 
     run(){
