@@ -5,7 +5,7 @@ class Database {
     this.connection = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: 'rootroot',
+      password: '2134jdvr',
       database: 'database_PIS3'
     });
   }
@@ -17,6 +17,17 @@ class Database {
 
     return Database.instance.connection;
   }
+
+  static query(query, data) {
+    // devolver una promesa
+    return new Promise(( resolve, reject ) => {
+      this.getInstance().query(query, data, ( err, rows) => {
+        if ( err ) reject( err )
+        else resolve( rows )
+      })
+    })
+  }
+
 }
 
 module.exports = Database;

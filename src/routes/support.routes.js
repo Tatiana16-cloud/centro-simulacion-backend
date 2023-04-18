@@ -10,24 +10,39 @@ class SupportRouter{
     }
     
     routes(){
-        this.supportRouter.get('/', (req,res)=>{
-            this.supportController.getAll(req,res);
+        this.supportRouter.get('/', async(req,res)=>{
+            const {result, error} = await this.supportController.getAll();
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.supportRouter.get('/:supportId', (req,res)=>{
-            this.supportController.getById(req,res);
+        this.supportRouter.get('/:supportId', async(req,res)=>{
+            const {supportId} = req.params
+            const {result, error} = await this.supportController.getById(supportId);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.supportRouter.post('/', (req,res)=>{
-            this.supportController.create(req,res);
+        this.supportRouter.post('/', async(req,res)=>{
+            const new_support = req.body;
+            const {result, error} = await this.supportController.create(new_support);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.supportRouter.put('/:supportId', (req,res)=>{
-            this.supportController.update(req,res);
+        this.supportRouter.put('/:supportId', async(req,res)=>{
+            const {supportId} = req.params
+            const updatedsupport = req.body
+            const {result, error} = await this.supportController.update(supportId, updatedsupport);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.supportRouter.delete('/:supportId', (req,res)=>{
-            this.supportController.delete(req,res);
+        this.supportRouter.delete('/:supportId', async(req,res)=>{
+            const {supportId} = req.params
+            const {result, error} = await this.supportController.delete(supportId);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
         return this.supportRouter;
     }

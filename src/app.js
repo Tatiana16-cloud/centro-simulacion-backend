@@ -39,10 +39,6 @@ class MainApp{
             }
         )
     }
-
-    move(){
-        console.log("Moviendose")
-    }
 }
 
 module.exports = MainApp;

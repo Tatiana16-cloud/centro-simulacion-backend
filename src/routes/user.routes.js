@@ -9,26 +9,40 @@ class UsuarioRouter{
         this.userRouter = Router();
     }
 
-
     routes(){
-        this.userRouter.get('/', (req,res)=>{
-            this.userController.getAll(req,res);
+        this.userRouter.get('/', async(req,res)=>{
+            const {result, error} = await this.userController.getAll();
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.userRouter.get('/:userId', (req,res)=>{
-            this.userController.getById(req,res);
+        this.userRouter.get('/:userId', async(req,res)=>{
+            const {userId} = req.params
+            const {result, error} = await this.userController.getById(userId);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.userRouter.post('/', (req,res)=>{
-            this.userController.create(req,res);
+        this.userRouter.post('/', async(req,res)=>{
+            const new_user = req.body;
+            const {result, error} = await this.userController.create(new_user);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.userRouter.put('/:userId', (req,res)=>{
-            this.userController.update(req,res);
+        this.userRouter.put('/:userId', async(req,res)=>{
+            const {userId} = req.params
+            const updatedUser = req.body
+            const {result, error} = await this.userController.update(userId, updatedUser);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.userRouter.delete('/:userId', (req,res)=>{
-            this.userController.delete(req,res);
+        this.userRouter.delete('/:userId', async(req,res)=>{
+            const {userId} = req.params
+            const {result, error} = await this.userController.delete(userId);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
         return this.userRouter;
     }

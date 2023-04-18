@@ -11,25 +11,39 @@ class DeviceRouter{
     }
 
     routes(){
-        this.deviceRouter.get('/', (req,res)=>{
-            this.deviceController.getAll(req,res);
-            
+        this.deviceRouter.get('/', async(req,res)=>{
+            const {result, error} = await this.deviceController.getAll();
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.deviceRouter.get('/:deviceId', (req,res)=>{
-            this.deviceController.getById(req,res);
+        this.deviceRouter.get('/:deviceId', async(req,res)=>{
+            const {deviceId} = req.params
+            const {result, error} = await this.deviceController.getById(deviceId);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.deviceRouter.post('/', (req,res)=>{
-            this.deviceController.create(req,res);
+        this.deviceRouter.post('/', async(req,res)=>{
+            const new_device = req.body;
+            const {result, error} = await this.deviceController.create(new_device);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.deviceRouter.put('/:deviceId', (req,res)=>{
-            this.deviceController.update(req,res);
+        this.deviceRouter.put('/:deviceId', async(req,res)=>{
+            const {deviceId} = req.params
+            const updateddevice = req.body
+            const {result, error} = await this.deviceController.update(deviceId, updateddevice);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
 
-        this.deviceRouter.delete('/:deviceId', (req,res)=>{
-            this.deviceController.delete(req,res);
+        this.deviceRouter.delete('/:deviceId', async(req,res)=>{
+            const {deviceId} = req.params
+            const {result, error} = await this.deviceController.delete(deviceId);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
         });
         return this.deviceRouter;
     }

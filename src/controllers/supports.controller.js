@@ -1,68 +1,51 @@
 const Database = require('../database')
 
 class SupportController {
-    connection = Database.getInstance();
-
-    async getAll(req,res){
-        this.connection.query('SELECT * FROM Support', (error, support, fields) => {
-            if (error) {
-              console.error(error);
-              return;
-            }
-          
-            return res.status(200).send(support);
-          });
+  async getAll(){
+    try {
+      const result = await Database.query('SELECT * FROM Support');
+      return {result}
+    } catch (error) {
+      return {error}
     }
+  }
 
-    async getById(req,res){
-        const {supportId} = req.params
-        this.connection.query('SELECT * FROM Support WHERE id = ?', supportId ,(error, support, fields) => {
-            if (error) {
-              console.error(error);
-              return;
-            }
-          
-            return res.status(200).send(support);
-          });
-    }
-
-    create (req,res) {
-        const new_support = req.body;
-        this.connection.query('INSERT INTO Support SET ?', new_support, (error, support) => {
-          if (error) {
-            console.error(error);
-            return;
-          }
-
-          return res.status(200).send(support);    
-        });
+  async getById(supportId){
+      try {
+        const result = await Database.query('SELECT * FROM Support WHERE id = ?', supportId);
+        return {result}
+      } catch (error) {
+        return {error}
       }
+  }
 
-      
-    update (req,res) {
-        const {supportId} = req.params
-        const updatedSupport = req.body
-        this.connection.query('UPDATE Support SET ? WHERE id = ?', [updatedSupport, supportId], (error, support) => {
-          if (error) {
-            console.error(error);
-            return;
-          }
-
-          return res.status(200).send(support);    
-        });
+  async create (new_support) {
+    try {
+      const result = await Database.query('INSERT INTO Support SET ?', new_support);
+      return {result}
+    } catch (error) {
+      return {error}
     }
+  }
 
-    delete (req,res) {
-        const {supportId} = req.params
-        this.connection.query('DELETE FROM Support WHERE id = ?', supportId, (error, support) => {
-          if (error) {
-            console.error(error);
-            return;
-          }
+    
+  async update (supportId, updatedSupport) {
+      try {
+        const result = await Database.query('UPDATE Support SET ? WHERE id = ?', [updatedSupport, supportId]);
+        return {result}
+      } catch (error) {
+        return {error}
+      }
+  }
 
-          return res.status(200).send(support);    
-        });
-    }
+  async delete (supportId) {
+      try {
+        const result = await Database.query('DELETE FROM Support WHERE id = ?', supportId);
+        return {result}
+      } catch (error) {
+        return {error}
+      }
+  }
     
 }
 

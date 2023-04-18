@@ -1,69 +1,51 @@
 const Database = require('../database')
 
 class DeviceController {
-    connection = Database.getInstance();
-
-    async getAll(req,res){
-        this.connection.query('SELECT * FROM device', (error, device, fields) => {
-            if (error) {
-              console.error(error);
-              return;
-            }
-          
-            return res.status(200).send(device);
-          });
+  async getAll(){
+    try {
+      const result = await Database.query('SELECT * FROM device');
+      return {result}
+    } catch (error) {
+      return {error}
     }
+  }
 
-    async getById(req,res){
-        const {deviceId} = req.params
-        this.connection.query('SELECT * FROM device WHERE id = ?', deviceId ,(error, device, fields) => {
-            if (error) {
-              console.error(error);
-              return;
-            }
-          
-            return res.status(200).send(device);
-          });
-    }
-
-    create (req,res) {
-        const new_device = req.body;
-        this.connection.query('INSERT INTO device SET ?', new_device, (error, device) => {
-          if (error) {
-            console.error(error);
-            return;
-          }
-
-          return res.status(200).send(device);    
-        });
+  async getById(deviceId){
+      try {
+        const result = await Database.query('SELECT * FROM device WHERE id = ?', deviceId);
+        return {result}
+      } catch (error) {
+        return {error}
       }
+  }
 
-      
-    update (req,res) {
-        const {deviceId} = req.params
-        const updatedDevice = req.body
-        this.connection.query('UPDATE device SET ? WHERE id = ?', [updatedDevice, deviceId], (error, device) => {
-          if (error) {
-            console.error(error);
-            return;
-          }
-
-          return res.status(200).send(device);    
-        });
+  async create (new_device) {
+    try {
+      const result = await Database.query('INSERT INTO device SET ?', new_device);
+      return {result}
+    } catch (error) {
+      return {error}
     }
+  }
 
-    delete (req,res) {
-        const {deviceId} = req.params
-        this.connection.query('DELETE FROM device WHERE id = ?', deviceId, (error, device) => {
-          if (error) {
-            console.error(error);
-            return;
-          }
-
-          return res.status(200).send(device);    
-        });
-    }
     
+  async update (deviceId, updatedDevice) {
+      try {
+        const result = await Database.query('UPDATE device SET ? WHERE id = ?', [updatedDevice, deviceId]);
+        return {result}
+      } catch (error) {
+        return {error}
+      }
+  }
+
+  async delete (deviceId) {
+      try {
+        const result = await Database.query('DELETE FROM device WHERE id = ?', deviceId);
+        return {result}
+      } catch (error) {
+        return {error}
+      }
+  }
 }
 
 module.exports = DeviceController;
