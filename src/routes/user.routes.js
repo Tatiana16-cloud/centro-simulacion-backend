@@ -44,6 +44,15 @@ class UsuarioRouter{
             if(error) return res.status(500).send(error);
             return res.status(200).send(result);
         });
+
+        this.userRouter.post('/login', async(req,res)=>{
+            const username = req.body.username;
+            const password = req.body.password;
+            const {result, error} = await this.userController.login(username, password);
+            if(error) return res.status(406).send(error);
+            return res.status(200).send(result);
+        });
+
         return this.userRouter;
     }
 }
