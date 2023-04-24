@@ -1,6 +1,7 @@
 const Router = require('express').Router
 const { response } = require('express');
-const DeviceController = require ('../controllers/devices.controller')
+const DeviceController = require ('../controllers/devices.controller');
+const { query } = require('../database');
 
 class DeviceRouter{
     deviceRouter;
@@ -12,7 +13,10 @@ class DeviceRouter{
 
     routes(){
         this.deviceRouter.get('/', async(req,res)=>{
-            const {result, error} = await this.deviceController.getAll();
+            const {result, error} = await this.deviceController.getAll({
+                pageSize: req.query.pageSize, 
+                pageNumber: req.query.pageNumber
+            });
             if(error) return res.status(500).send(error);
             return res.status(200).send(result);
         });

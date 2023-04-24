@@ -1,9 +1,28 @@
 const Database = require('../database')
 
 class DeviceController {
-  async getAll(){
+  async getAll({pageSize, pageNumber}){
     try {
-      const result = await Database.query('SELECT * FROM device');
+      let query = `
+        SELECT device.*, 
+        Supplier.id as supplier_id, 
+        Supplier.name as supplier_name, 
+        Supplier.address as supplier_address, 
+        Supplier.phone_number as supplier_phone_number,
+        Support_supplier.id as support_supplier_id, 
+        Support_supplier.name as support_supplier_name, 
+        Support_supplier.address as support_supplier_address, 
+        Support_supplier.phone_number as support_supplier_phone_number 
+        FROM device 
+        LEFT JOIN Supplier ON device.Supplier = Supplier.id
+        LEFT JOIN Supplier AS Support_supplier ON device.Support_supplier = support_supplier.id
+      `;
+
+      const offset = (pageNumber - 1) * pageSize;
+      if(offset) query = query + ` LIMIT ${pageSize} OFFSET ${offset};`
+
+      const result = await Database.query(query.replace(/[\r\n]+/g, " "));
+      result.map((device)=> this.convertSupplierToObject(device))
       return {result}
     } catch (error) {
       return {error}
@@ -45,6 +64,35 @@ class DeviceController {
       } catch (error) {
         return {error}
       }
+  }
+
+  convertSupplierToObject(device){
+    device.supplier = {
+      id: device.supplier_id,
+      name : device.supplier_name,
+      phone_number : device.supplier_phone_number,
+      mail : device.supplier_mail,
+      address : device.supplier_address,    
+    }
+    device.support_supplier = {
+        id: device.support_supplier_id,
+        name : device.support_supplier_name,
+        phone_number : device.support_supplier_phone_number,
+        mail : device.support_supplier_mail,
+        address : device.support_supplier_address,    
+    }
+
+    delete device.supplier_name; 
+    delete device.supplier_phone_number; 
+    delete device.supplier_mail;
+    delete device.supplier_address;
+
+    delete device.support_supplier_name; 
+    delete device.support_supplier_phone_number; 
+    delete device.support_supplier_mail;
+    delete device.support_supplier_address;
+
+    return device
   }
 }
 
