@@ -5,8 +5,3 @@ const api = new App(3000);
 api.setMiddlewares()
 api.setRouter()
 api.run();
-
-
-
-
-

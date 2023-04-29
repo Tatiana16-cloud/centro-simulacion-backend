@@ -1,5 +1,4 @@
 const {readXLSXFile} = require('./xlsx.utils')
-const fs = require('fs');
 const path = require('path');
 const Database = require('../database');
 const { exit } = require('process');
@@ -37,8 +36,6 @@ devices.map((device)=>{
     return device;
 })
 
-main();
-
 async function main(){
     const newDevices = await removeFoundRecordsFromObject(devices, 'device', 'deviceId');
     console.log("Nuevos dispositivos [deviceId]:", newDevices.map((device)=> device.deviceId))
@@ -58,7 +55,7 @@ async function main(){
     }
 
     await insertMultipleRecords(newDevices, 'device')
-    exit(0)
+    //exit(0)
 }
 
 async function removeFoundRecordsFromObject(registers, table_name, identifier_field) {
@@ -102,3 +99,7 @@ async function insertMultipleRecords(registers, table_name) {
         console.log('ERROR',error)   
     }
 }
+
+module.exports = {
+    main
+};

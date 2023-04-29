@@ -1,21 +1,22 @@
 const Database = require('../database')
+const {main} = require('../tasks/importDevices')
 
 class DeviceController {
   async getAll({pageSize, pageNumber}){
     try {
       let query = `
-        SELECT device.*, 
-        Supplier.id as supplier_id, 
-        Supplier.name as supplier_name, 
-        Supplier.address as supplier_address, 
-        Supplier.phone_number as supplier_phone_number,
-        Support_supplier.id as support_supplier_id, 
-        Support_supplier.name as support_supplier_name, 
-        Support_supplier.address as support_supplier_address, 
-        Support_supplier.phone_number as support_supplier_phone_number 
-        FROM device 
-        LEFT JOIN Supplier ON device.Supplier = Supplier.id
-        LEFT JOIN Supplier AS Support_supplier ON device.Support_supplier = support_supplier.id
+      SELECT device.*, 
+      Supplier.id as supplier_id, 
+      Supplier.name as supplier_name, 
+      Supplier.address as supplier_address, 
+      Supplier.phone_number as supplier_phone_number,
+      Support_supplier.id as support_supplier_id, 
+      Support_supplier.name as support_supplier_name, 
+      Support_supplier.address as support_supplier_address, 
+      Support_supplier.phone_number as support_supplier_phone_number 
+      FROM device 
+      LEFT JOIN Supplier ON device.Supplier = Supplier.id
+      LEFT JOIN Supplier AS Support_supplier ON device.Support_supplier = Support_supplier.id;
       `;
 
       const offset = (pageNumber - 1) * pageSize;
@@ -64,6 +65,15 @@ class DeviceController {
       } catch (error) {
         return {error}
       }
+  }
+
+  async loadDatabase(){
+    try {
+      const result = await main()
+      return {result:{a:4}}
+    } catch (error) {
+      return {error}
+    }
   }
 
   convertSupplierToObject(device){

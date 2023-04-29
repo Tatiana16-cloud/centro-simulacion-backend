@@ -1,12 +1,13 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 class Database {
   constructor() {
     this.connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '2134jdvr',
-      database: 'database_PIS3'
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_ROOT_PASSWORD,
+      database: process.env.MYSQL_DATABASE
     });
   }
 

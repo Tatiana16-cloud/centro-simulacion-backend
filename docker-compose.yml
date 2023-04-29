@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  node-app:
+    image: csbackend:1
+    container_name: my-node-container
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    networks:
+      - my-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: my-mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - my-network
+    command: --port=3307
+networks:
+  my-network:

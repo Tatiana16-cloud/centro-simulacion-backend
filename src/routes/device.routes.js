@@ -1,8 +1,5 @@
 const Router = require('express').Router
-const { response } = require('express');
 const DeviceController = require ('../controllers/devices.controller');
-const { query } = require('../database');
-
 class DeviceRouter{
     deviceRouter;
     deviceController = new DeviceController();
@@ -46,6 +43,12 @@ class DeviceRouter{
         this.deviceRouter.delete('/:deviceId', async(req,res)=>{
             const {deviceId} = req.params
             const {result, error} = await this.deviceController.delete(deviceId);
+            if(error) return res.status(500).send(error);
+            return res.status(200).send(result);
+        });
+
+        this.deviceRouter.get('/loadDB/all', async(req,res)=>{
+            const {result, error} = await this.deviceController.loadDatabase();
             if(error) return res.status(500).send(error);
             return res.status(200).send(result);
         });
