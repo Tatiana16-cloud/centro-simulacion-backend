@@ -1,9 +1,8 @@
 const {readXLSXFile} = require('./xlsx.utils')
 const path = require('path');
 const Database = require('../database');
-const { exit } = require('process');
 
-const filePath = path.resolve(__dirname, './data/devices2.xlsx');
+const filePath = path.resolve(__dirname, './data/devices.xlsx');
 let devices = readXLSXFile(filePath);
 
 const dateKeys = Object.keys(devices[0]).filter((key)=> key.includes('date'))
@@ -37,12 +36,6 @@ devices = devices.map((device)=>{
 })
 
 async function main(){
-    const sqlSelect = `DELETE FROM device`;
-    const rows = await Database.query(sqlSelect);
-
-    const sqlSelect2 = `DELETE FROM Supplier`;
-    const rows2 = await Database.query(sqlSelect2);
-
     const newDevices = await removeFoundRecordsFromObject(devices, 'device', 'deviceId');
     console.log("Nuevos dispositivos [deviceId]:", newDevices.map((device)=> device.deviceId))
 
@@ -60,15 +53,16 @@ async function main(){
         })
     }
 
-    await insertMultipleRecords(newDevices, 'device')
-    //exit(0)
+    const result = await insertMultipleRecords(newDevices, 'device')
+    const allDevices = await Database.query('SELECT * FROM device');
+    return result;
 }
 
 async function removeFoundRecordsFromObject(registers, table_name, identifier_field) {
     if(registers.length === 0) return []
     const registersObject = arrayToObject(registers,identifier_field)
     // Obtener los identificadores (ids) del objeto
-    const ids = Object.keys(registersObject);
+    const ids = Object.keys(registersObject).map((id)=> isNaN(parseInt(id))? id : parseInt(id));
 
     // Consultar la tabla 'registers' basándose en los identificadores (ids)
     const sqlSelect = `SELECT * FROM ${table_name} WHERE ${identifier_field} IN (?)`;
@@ -100,9 +94,9 @@ async function insertMultipleRecords(registers, table_name) {
     const values = registers.map(registro => keys.map(key => registro[key]));
 
     try {
-        const result = await Database.query(sql, [values]);
+        return await Database.query(sql, [values]);
     } catch (error) {
-        console.log('ERROR',error)   
+        return error
     }
 }
 
