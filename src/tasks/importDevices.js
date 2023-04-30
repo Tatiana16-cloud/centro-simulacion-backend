@@ -3,24 +3,24 @@ const path = require('path');
 const Database = require('../database');
 const { exit } = require('process');
 
-const filePath = path.resolve(__dirname, './data/devices.xlsx');
-const devices = readXLSXFile(filePath);
+const filePath = path.resolve(__dirname, './data/devices2.xlsx');
+let devices = readXLSXFile(filePath);
 
 const dateKeys = Object.keys(devices[0]).filter((key)=> key.includes('date'))
 
-devices.map((device)=>{
+devices = devices.map((device)=>{
     dateKeys.forEach((dateKey)=> device[dateKey] = new Date(device[dateKey]))
     device.supplier = {
-        name : device.supplier_name,
-        phone_number : device.supplier_phone_number,
-        mail : device.supplier_mail,
-        address : device.supplier_address,    
+        name : device.supplier_name?.toString().trim(),
+        phone_number : device.supplier_phone_number?.toString().toString().trim(),
+        mail : device.supplier_mail?.toString().trim(),
+        address : device.supplier_address?.toString().trim(),    
     }
     device.support_supplier = {
-        name : device.support_supplier_name,
-        phone_number : device.support_supplier_phone_number,
-        mail : device.support_supplier_mail,
-        address : device.support_supplier_address,    
+        name : device.support_supplier_name?.toString().trim(),
+        phone_number : device.support_supplier_phone_number?.toString().trim(),
+        mail : device.support_supplier_mail?.toString().trim(),
+        address : device.support_supplier_address?.toString().trim(),    
     }
 
     delete device.supplier_name; 
@@ -37,6 +37,12 @@ devices.map((device)=>{
 })
 
 async function main(){
+    const sqlSelect = `DELETE FROM device`;
+    const rows = await Database.query(sqlSelect);
+
+    const sqlSelect2 = `DELETE FROM Supplier`;
+    const rows2 = await Database.query(sqlSelect2);
+
     const newDevices = await removeFoundRecordsFromObject(devices, 'device', 'deviceId');
     console.log("Nuevos dispositivos [deviceId]:", newDevices.map((device)=> device.deviceId))
 

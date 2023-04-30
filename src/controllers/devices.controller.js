@@ -70,7 +70,7 @@ class DeviceController {
   async loadDatabase(){
     try {
       const result = await main()
-      return {result:{a:4}}
+      return {result:{OK: 200}}
     } catch (error) {
       return {error}
     }
