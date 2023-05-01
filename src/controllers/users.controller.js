@@ -38,8 +38,10 @@ class UserController {
     async login (username, password){
       try {
         const result = await Database.query('SELECT * FROM User WHERE username = ?', username);
+        if(!result[0]) return {error: 'El usuario no existe'}
         const match = await comparePassword(password, result[0].password);
-        if(match) return {result}
+        delete result[0].password
+        if(match) return {result: result[0]}
         return {error: 'Contraseña incorrecta'}
       } catch (error) {
         return {error}

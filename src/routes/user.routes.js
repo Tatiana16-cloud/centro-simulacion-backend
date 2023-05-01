@@ -49,8 +49,8 @@ class UsuarioRouter{
             const username = req.body.username;
             const password = req.body.password;
             const {result, error} = await this.userController.login(username, password);
-            if(error) return res.status(406).send(error);
-            return res.status(200).send(result);
+            if(error) return res.status(200).send({error});
+            return res.status(200).send({user:result});
         });
 
         return this.userRouter;
