@@ -46,7 +46,6 @@ class SupplierController {
           return {error}
         }
     }
-    
 }
 
 module.exports = SupplierController;

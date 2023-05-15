@@ -1,23 +1,28 @@
 const Database = require('../database')
 const {main} = require('../tasks/importDevices')
 
+const populateSuppliersQuery = `
+SELECT device.*, 
+Supplier.id as supplier_id, 
+Supplier.name as supplier_name, 
+Supplier.address as supplier_address, 
+Supplier.phone_number as supplier_phone_number,
+Supplier.mail as supplier_mail, 
+Support_supplier.id as support_supplier_id, 
+Support_supplier.name as support_supplier_name, 
+Support_supplier.address as support_supplier_address, 
+Support_supplier.phone_number as support_supplier_phone_number, 
+Support_supplier.mail as support_supplier_mail 
+FROM device 
+LEFT JOIN Supplier ON device.Supplier = Supplier.id
+LEFT JOIN Supplier AS Support_supplier ON device.Support_supplier = Support_supplier.id
+`
+
+
 class DeviceController {
   async getAll({pageSize, pageNumber}){
     try {
-      let query = `
-      SELECT device.*, 
-      Supplier.id as supplier_id, 
-      Supplier.name as supplier_name, 
-      Supplier.address as supplier_address, 
-      Supplier.phone_number as supplier_phone_number,
-      Support_supplier.id as support_supplier_id, 
-      Support_supplier.name as support_supplier_name, 
-      Support_supplier.address as support_supplier_address, 
-      Support_supplier.phone_number as support_supplier_phone_number 
-      FROM device 
-      LEFT JOIN Supplier ON device.Supplier = Supplier.id
-      LEFT JOIN Supplier AS Support_supplier ON device.Support_supplier = Support_supplier.id;
-      `;
+      let query = populateSuppliersQuery;
 
       const offset = (pageNumber - 1) * pageSize;
       if(offset) query = query + ` LIMIT ${pageSize} OFFSET ${offset};`
@@ -32,7 +37,9 @@ class DeviceController {
 
   async getById(deviceId){
       try {
-        const result = await Database.query('SELECT * FROM device WHERE id = ?', deviceId);
+        let query = populateSuppliersQuery + ` WHERE device.id = ?`;
+        const result = await Database.query(query.replace(/[\r\n]+/g, " "), deviceId);
+        result.map((device)=> this.convertSupplierToObject(device))
         return {result}
       } catch (error) {
         return {error}
@@ -41,9 +48,20 @@ class DeviceController {
 
   async create (new_device) {
     try {
+      new_device.deviceId = parseInt(new_device.deviceId)
+
+      if(new_device.supplier && new_device.supplier.name){
+          new_device.supplier = await this.insertNewSupplier(new_device.supplier)
+      }
+
+      if(new_device.support_supplier && new_device.support_supplier.name){
+        new_device.support_supplier = await this.insertNewSupplier(new_device.support_supplier)
+      }
+
       const result = await Database.query('INSERT INTO device SET ?', new_device);
       return {result}
     } catch (error) {
+      console.log(error)
       return {error}
     }
   }
@@ -51,9 +69,21 @@ class DeviceController {
     
   async update (deviceId, updatedDevice) {
       try {
+        console.log(updatedDevice)
+        if(updatedDevice.deviceId) updatedDevice.deviceId = parseInt(updatedDevice.deviceId)
+
+        if(updatedDevice.supplier && updatedDevice.supplier.name){
+          updatedDevice.supplier = await this.insertNewSupplier(updatedDevice.supplier)
+        }else delete updatedDevice.supplier
+
+        if(updatedDevice.support_supplier && updatedDevice.support_supplier.name){
+          updatedDevice.support_supplier = await this.insertNewSupplier(updatedDevice.support_supplier)
+        }else delete updatedDevice.support_supplier
+
         const result = await Database.query('UPDATE device SET ? WHERE id = ?', [updatedDevice, deviceId]);
         return {result}
       } catch (error) {
+        console.log(error)
         return {error}
       }
   }
@@ -103,6 +133,23 @@ class DeviceController {
     delete device.support_supplier_address;
 
     return device
+  }
+
+  // Función para insertar o actualizar un registro en la tabla Supplier
+  async insertNewSupplier(supplier) {
+      try {
+        const [existingSupplier] = await Database.query('SELECT id FROM Supplier WHERE name = ? LIMIT 1',[supplier.name]);
+
+        if (existingSupplier?.length > 0) {
+          console.log('El proveedor ya existe, su ID es:', existingSupplier[0].id);
+          return existingSupplier[0].id;
+        } else {
+          const result = await Database.query('INSERT INTO Supplier SET ?',supplier);
+          return result.insertId;
+        }
+      } catch (error) {
+        throw error;
+      }
   }
 }
 
