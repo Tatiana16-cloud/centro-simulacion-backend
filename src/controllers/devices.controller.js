@@ -18,7 +18,6 @@ LEFT JOIN Supplier ON device.Supplier = Supplier.id
 LEFT JOIN Supplier AS Support_supplier ON device.Support_supplier = Support_supplier.id
 `
 
-
 class DeviceController {
   async getAll({pageSize, pageNumber}){
     try {
