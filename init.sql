@@ -59,3 +59,20 @@ CREATE TABLE IF NOT EXISTS User (
     role CHAR(255),
     PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS Places (
+    id INT NOT NULL AUTO_INCREMENT,
+    places_name VARCHAR(255),
+    max_capacity INT,
+    location VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+
+CREATE TABLE IF NOT EXISTS Labs (
+    id INT NOT NULL AUTO_INCREMENT,
+    practice_name VARCHAR(255),
+    location_assigned VARCHAR(255),
+    equipments VARCHAR(255),
+    PRIMARY KEY (id)
+);

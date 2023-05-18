@@ -3,6 +3,9 @@ const DeviceRouter = require('./device.routes');
 const UsuarioRouter = require('./user.routes');
 const SupportRouter = require('./support.routes');
 const SupplierRouter = require('./supplier.routes')
+const LabsRouter = require('./labs.routes')
+const PlacesRouter = require('./places.routes')
+
 
 class MainRouter{
     routes = Router();
@@ -12,6 +15,8 @@ class MainRouter{
     instanceUsuarioRouter = new UsuarioRouter()
     instanceSupportRouter = new SupportRouter()
     instanceSupplierRouter = new SupplierRouter()
+    instanceLabsRouter = new LabsRouter()
+    instancePlacesRouter = new PlacesRouter()
 
     constructor(){
 
@@ -23,6 +28,8 @@ class MainRouter{
         this.routes.use('/users', this.instanceUsuarioRouter.routes());
         this.routes.use('/supports', this.instanceSupportRouter.routes());
         this.routes.use('/suppliers', this.instanceSupplierRouter.routes());
+        this.routes.use('/labs', this.instanceLabsRouter.routes());
+        this.routes.use('/places', this.instancePlacesRouter.routes());
     }
 }
 
