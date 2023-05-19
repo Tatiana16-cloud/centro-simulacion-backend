@@ -60,18 +60,37 @@ CREATE TABLE IF NOT EXISTS User (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS Reservation (
+    id INT NOT NULL AUTO_INCREMENT,
+    date DATE NOT NULL,
+    faculty VARCHAR(255) NOT NULL,
+    program VARCHAR(255) NOT NULL,
+    semester VARCHAR(255) NOT NULL,
+    affiliation VARCHAR(255) NOT NULL,
+    participants INT NOT NULL,
+    responsible VARCHAR(255) NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    activity VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    equipment VARCHAR(255) NOT NULL,
+    description TEXT,
+    PRIMARY KEY (id)
+);
+
+
 CREATE TABLE IF NOT EXISTS Place (
     id INT NOT NULL AUTO_INCREMENT,
-    name CHAR(255),
+    name CHAR(255) NOT NULL,
     max_capacity INT,
-    location CHAR(255),
+    location CHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS Lab (
     id INT NOT NULL AUTO_INCREMENT,
-    name CHAR(255),
-    location CHAR(255),
+    name CHAR(255) NOT NULL,
+    location CHAR(255) NOT NULL,
     equipments CHAR(255),
     PRIMARY KEY (id)
 );

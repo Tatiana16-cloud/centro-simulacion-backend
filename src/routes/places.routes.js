@@ -45,14 +45,6 @@ class PlacesRouter{
             return res.status(200).send(result);
         });
 
-        this.placesRouter.post('/login', async(req,res)=>{
-            const placesname = req.body.placesname;
-            const password = req.body.password;
-            const {result, error} = await this.placesController.login(placesname, password);
-            if(error) return res.status(200).send({error});
-            return res.status(200).send({places:result});
-        });
-
         return this.placesRouter;
     }
 }
