@@ -60,19 +60,18 @@ CREATE TABLE IF NOT EXISTS User (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS Places (
+CREATE TABLE IF NOT EXISTS Place (
     id INT NOT NULL AUTO_INCREMENT,
-    places_name VARCHAR(255),
+    name CHAR(255),
     max_capacity INT,
-    location VARCHAR(255),
+    location CHAR(255),
     PRIMARY KEY (id)
 );
 
-
-CREATE TABLE IF NOT EXISTS Labs (
+CREATE TABLE IF NOT EXISTS Lab (
     id INT NOT NULL AUTO_INCREMENT,
-    practice_name VARCHAR(255),
-    location_assigned VARCHAR(255),
-    equipments VARCHAR(255),
+    name CHAR(255),
+    location CHAR(255),
+    equipments CHAR(255),
     PRIMARY KEY (id)
 );

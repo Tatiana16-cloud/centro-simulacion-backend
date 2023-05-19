@@ -45,14 +45,6 @@ class LabsRouter{
             return res.status(200).send(result);
         });
 
-        this.labsRouter.post('/login', async(req,res)=>{
-            const labsname = req.body.labsname;
-            const password = req.body.password;
-            const {result, error} = await this.labsController.login(labsname, password);
-            if(error) return res.status(200).send({error});
-            return res.status(200).send({labs:result});
-        });
-
         return this.labsRouter;
     }
 }

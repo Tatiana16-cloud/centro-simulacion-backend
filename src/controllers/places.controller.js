@@ -3,7 +3,7 @@ const Database = require('../database')
 class PlacesController {
     async getAll(){
       try {
-        const result = await Database.query('SELECT * FROM Places');
+        const result = await Database.query('SELECT * FROM Place');
         return {result}
       } catch (error) {
         return {error}
@@ -12,7 +12,7 @@ class PlacesController {
 
     async getById(placesId){
         try {
-          const result = await Database.query('SELECT * FROM Places WHERE id = ?', placesId);
+          const result = await Database.query('SELECT * FROM Place WHERE id = ?', placesId);
           return {result}
         } catch (error) {
           return {error}
@@ -21,7 +21,7 @@ class PlacesController {
 
     async create (new_places) {
       try {
-        const result = await Database.query('INSERT INTO Places SET ?', new_places);
+        const result = await Database.query('INSERT INTO Place SET ?', new_places);
         return {result}
       } catch (error) {
         return {error}
@@ -31,7 +31,7 @@ class PlacesController {
       
     async update (placesId, updatedPlaces) {
         try {
-          const result = await Database.query('UPDATE Places SET ? WHERE id = ?', [updatedPlaces, placesId]);
+          const result = await Database.query('UPDATE Place SET ? WHERE id = ?', [updatedPlaces, placesId]);
           return {result}
         } catch (error) {
           return {error}
@@ -40,7 +40,7 @@ class PlacesController {
 
     async delete (placesId) {
         try {
-          const result = await Database.query('DELETE FROM Places WHERE id = ?', placesId);
+          const result = await Database.query('DELETE FROM Place WHERE id = ?', placesId);
           return {result}
         } catch (error) {
           return {error}
