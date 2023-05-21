@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS Support (
     responsable CHAR(255),
     date DATETIME,
     description TEXT,
+    process_description TEXT,
     status CHAR(255),
     type CHAR(255),
     PRIMARY KEY (id),

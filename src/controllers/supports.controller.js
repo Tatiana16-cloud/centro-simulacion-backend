@@ -42,6 +42,7 @@ class SupportController {
         const result = await Database.query('UPDATE Support SET ? WHERE id = ?', [updatedSupport, supportId]);
         return {result}
       } catch (error) {
+        console.log(error)
         return {error}
       }
   }

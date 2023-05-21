@@ -60,7 +60,6 @@ class DeviceController {
       const result = await Database.query('INSERT INTO device SET ?', new_device);
       return {result}
     } catch (error) {
-      console.log(error)
       return {error}
     }
   }
@@ -68,7 +67,6 @@ class DeviceController {
     
   async update (deviceId, updatedDevice) {
       try {
-        console.log(updatedDevice)
         if(updatedDevice.deviceId) updatedDevice.deviceId = parseInt(updatedDevice.deviceId)
 
         if(updatedDevice.supplier && updatedDevice.supplier.name){
@@ -82,7 +80,6 @@ class DeviceController {
         const result = await Database.query('UPDATE device SET ? WHERE id = ?', [updatedDevice, deviceId]);
         return {result}
       } catch (error) {
-        console.log(error)
         return {error}
       }
   }
@@ -140,7 +137,6 @@ class DeviceController {
         const [existingSupplier] = await Database.query('SELECT id FROM Supplier WHERE name = ? LIMIT 1',[supplier.name]);
 
         if (existingSupplier?.length > 0) {
-          console.log('El proveedor ya existe, su ID es:', existingSupplier[0].id);
           return existingSupplier[0].id;
         } else {
           const result = await Database.query('INSERT INTO Supplier SET ?',supplier);
