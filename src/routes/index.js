@@ -5,7 +5,6 @@ const SupportRouter = require('./support.routes');
 const SupplierRouter = require('./supplier.routes')
 const LabsRouter = require('./labs.routes')
 const PlacesRouter = require('./places.routes')
-const ReservationsRouter = require('./reservation.routes')
 
 
 class MainRouter{
@@ -18,7 +17,6 @@ class MainRouter{
     instanceSupplierRouter = new SupplierRouter()
     instanceLabsRouter = new LabsRouter()
     instancePlacesRouter = new PlacesRouter()
-    instanceReservationsRouter = new ReservationsRouter()
 
     constructor(){
 
@@ -32,9 +30,9 @@ class MainRouter{
         this.routes.use('/suppliers', this.instanceSupplierRouter.routes());
         this.routes.use('/labs', this.instanceLabsRouter.routes());
         this.routes.use('/places', this.instancePlacesRouter.routes());
-        this.routes.use('/reservations', this.instanceReservationsRouter.routes());
     }
 }
+
 
 
 module.exports = MainRouter;
