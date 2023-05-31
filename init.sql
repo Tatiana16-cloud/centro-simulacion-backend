@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS User (
     password CHAR(255),
     name CHAR(255),
     role CHAR(255),
+    phone_number CHAR(255),
+    mail CHAR(255),
     PRIMARY KEY (id)
 );
 
