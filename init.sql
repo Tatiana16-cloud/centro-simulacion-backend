@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS Support (
     id INT NOT NULL AUTO_INCREMENT,
     device_id INT,
     responsable CHAR(255),
+    responsable_verification CHAR(255),
     date DATETIME,
     description TEXT,
     process_description TEXT,

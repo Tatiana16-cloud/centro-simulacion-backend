@@ -26,10 +26,16 @@ class DeviceController {
       const offset = (pageNumber - 1) * pageSize;
       if(offset) query = query + ` LIMIT ${pageSize} OFFSET ${offset};`
 
-      const result = await Database.query(query.replace(/[\r\n]+/g, " "));
+      let result = await Database.query(query.replace(/[\r\n]+/g, " "));
       result.map((device)=> this.convertSupplierToObject(device))
+
+      // Asignando colores dependiendo de sus mantenimientos
+      const supportResult = await Database.query('SELECT * FROM Support WHERE status = ?', 'SCHEDULED');
+      result = assignColorToDevices(result, supportResult);
+
       return {result}
     } catch (error) {
+      console.log(error)
       return {error}
     }
   }
@@ -146,6 +152,48 @@ class DeviceController {
         throw error;
       }
   }
+}
+
+// Funcion para agregar colores a los equipos
+const assignColorToDevices = (devices, supports)=>{
+  const supportsObject = {}
+  for (const _support of supports) {
+    if(supportsObject[_support.device_id]){
+      supportsObject[_support.device_id].push(_support)
+    }else{
+      supportsObject[_support.device_id] = [_support]
+    }
+  }
+
+  devices.map((device)=> {
+    if(supportsObject[device.id]){
+      supportsObject[device.id].sort((a,b)=> new Date(a.date).getTime() - new Date(b.date).getTime() )
+      const nextSupport = supportsObject[device.id][0]
+      if(nextSupport){
+        const today = new Date();
+        today.setHours(today.getHours()-5);
+        const nextSupportDate = new Date(nextSupport.date)
+
+        if(today.getTime() > nextSupportDate.getTime()){
+          device.status = 'EXPIRED'
+        }else if (today.getTime() <= nextSupportDate.getTime()){
+          if(today.getMonth() === nextSupportDate.getMonth()){
+            device.status = 'COMMING'
+          }else {
+            device.status = 'ON_TIME'
+          }
+        }else {
+          device.status = 'DEFAULT'
+        }
+      }else{
+        device.status = 'DEFAULT'
+      }
+    }else{
+      device.status = 'DEFAULT'
+    }
+  })
+  
+  return devices;
 }
 
 module.exports = DeviceController;
