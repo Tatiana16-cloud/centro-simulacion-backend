@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS User (
     role INT,
     phone_number CHAR(255),
     mail CHAR(255),
-    PRIMARY KEY (document)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS Place (

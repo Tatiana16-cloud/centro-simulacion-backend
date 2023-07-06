@@ -3,8 +3,8 @@ const DeviceRouter = require('./device.routes');
 const UsuarioRouter = require('./user.routes');
 const SupportRouter = require('./support.routes');
 const SupplierRouter = require('./supplier.routes')
-const LabsRouter = require('./labs.routes')
-const PlacesRouter = require('./places.routes')
+const LabsRouter = require('./practice.routes')
+const PlacesRouter = require('./place.routes')
 
 
 class MainRouter{
