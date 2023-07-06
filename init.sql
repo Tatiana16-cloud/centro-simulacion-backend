@@ -56,10 +56,13 @@ CREATE TABLE IF NOT EXISTS User (
     username CHAR(255),
     password CHAR(255),
     name CHAR(255),
-    role CHAR(255),
+    last_name CHAR(255),
+    document INT,
+    ocupation CHAR(255),
+    role INT,
     phone_number CHAR(255),
     mail CHAR(255),
-    PRIMARY KEY (id)
+    PRIMARY KEY (document)
 );
 
 CREATE TABLE IF NOT EXISTS Place (
@@ -67,13 +70,40 @@ CREATE TABLE IF NOT EXISTS Place (
     name CHAR(255),
     max_capacity INT,
     location CHAR(255),
-    PRIMARY KEY (id)
+    status INT,
+    cod CHAR (255),
+    PRIMARY KEY (cod)
 );
 
-CREATE TABLE IF NOT EXISTS Lab (
+CREATE TABLE IF NOT EXISTS Practice (
     id INT NOT NULL AUTO_INCREMENT,
     name CHAR(255),
-    location CHAR(255),
-    equipments CHAR(255),
+    cod CHAR(255),
+    devices CHAR(255),
+    cod_place CHAR(255),
+    PRIMARY KEY (cod)
+    affiliation CHAR(255),
+    program CHAR(255),
+    semester INT,
+    FOREIGN KEY (cod_place) REFERENCES Place(cod)
+);
+
+CREATE TABLE IF NOT EXISTS Reservation (
+    id INT NOT NULL AUTO_INCREMENT,
+    cod CHAR (255),
+    cod_practice CHAR(255),
+    participants INT NOT NULL,
+    date DATE NOT NULL,
+    responsible VARCHAR(255) NOT NULL,
+    responsible_practice VARCHAR(255) NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    activity VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    devices VARCHAR(255) NOT NULL,
+    description TEXT,
     PRIMARY KEY (id)
+    FOREIGN KEY (cod_practice) REFERENCES Practice(cod)
+    FOREIGN KEY (responsable) REFERENCES User(document)
+    FOREIGN KEY (responsable_practice) REFERENCES User(document)
 );
