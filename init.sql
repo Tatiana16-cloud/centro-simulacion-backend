@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS Place (
     location CHAR(255),
     status INT,
     cod CHAR (255),
-    PRIMARY KEY (cod)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS Practice (
@@ -81,11 +81,11 @@ CREATE TABLE IF NOT EXISTS Practice (
     cod CHAR(255),
     devices CHAR(255),
     cod_place CHAR(255),
-    PRIMARY KEY (cod)
     affiliation CHAR(255),
     program CHAR(255),
     semester INT,
-    FOREIGN KEY (cod_place) REFERENCES Place(cod)
+    PRIMARY KEY (id),
+    FOREIGN KEY (cod_place) REFERENCES Place(id)
 );
 
 CREATE TABLE IF NOT EXISTS Reservation (
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS Reservation (
     devices VARCHAR(255) NOT NULL,
     description TEXT,
     PRIMARY KEY (id)
-    FOREIGN KEY (cod_practice) REFERENCES Practice(cod)
-    FOREIGN KEY (responsable) REFERENCES User(document)
-    FOREIGN KEY (responsable_practice) REFERENCES User(document)
+    -- FOREIGN KEY (cod_practice) REFERENCES Practice(id),
+    -- FOREIGN KEY (responsable) REFERENCES User(id),
+    -- FOREIGN KEY (responsable_practice) REFERENCES User(id)
 );
